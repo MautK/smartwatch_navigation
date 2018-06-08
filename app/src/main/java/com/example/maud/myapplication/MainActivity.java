@@ -22,8 +22,9 @@ public class MainActivity extends AppCompatActivity {
 
     private final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     private LocationManager mLocationManager;
-    private String TAG = "FOOBAR";
-    private Location mLocation = new Location("");
+//    private String TAG = "FOOBAR";
+//    private Location mLocation = new Location("");
+    public position mPosition = new position();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +32,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         checkPermission(this);
 
-        mLocation.setLatitude(0.0d);
-        mLocation.setLongitude(0.0d);
+        mPosition.create();
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1,1, mLocationListener);
 
@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Context context = getApplicationContext();
-                CharSequence text = mLocation.toString();
+                CharSequence text = mPosition.getLocation().toString();
                 int duration = Toast.LENGTH_SHORT;
 
-                Log.d(TAG, "onClick: " + mLocation.toString());
+                Log.d(mPosition.TAG, "onClick: " + mPosition.getLocation().toString());
                 Toast.makeText(context, text, duration).show();
             }
         });
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
     private final LocationListener mLocationListener = new LocationListener() {
         @Override
         public void onLocationChanged(Location location) {
-            mLocation = location;
+            mPosition.setLocation(location);
         }
 
         @Override
